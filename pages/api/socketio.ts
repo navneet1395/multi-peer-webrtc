@@ -4,12 +4,23 @@ import { Server as ServerIO } from 'socket.io';
 import { NextApiResponseServerIO } from 'common/types';
 import { SOCKET_PATH } from 'common/constants';
 
-const socketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
+export default async function socketHandler(
+  req: NextApiRequest,
+  res: NextApiResponseServerIO
+) {
   if (!res.socket.server.io) {
     console.log('Socket is initializing');
 
     const httpServer = res.socket.server;
-    const io = new ServerIO(httpServer, { path: SOCKET_PATH });
+    const io = new ServerIO(httpServer, {
+      path: SOCKET_PATH,
+      cors: {
+        origin: '*', // Allow all origins
+        methods: ['GET', 'POST'], // Allowed HTTP methods
+        allowedHeaders: ['Content-Type'], // Allowed headers
+        credentials: true, // Allow credentials
+      },
+    });
     res.socket.server.io = io;
 
     io.on('connection', (socket) => {
@@ -18,7 +29,7 @@ const socketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
       socket.on('room:join', ({ room, user }) => {
         console.table({
           'room-id': room,
-          'used-id': user.id,
+          'user-id': user.id,
           'user-name': user.name,
         });
 
@@ -66,6 +77,4 @@ const socketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
   }
 
   res.end();
-};
-
-export default socketHandler;
+}
