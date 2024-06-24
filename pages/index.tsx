@@ -37,16 +37,18 @@ const Home: NextPage = () => {
         >
           Create Room
         </button>
-        <input
-          onChange={(e: any) => setUserName(e.target.value)}
-          placeholder="Enter your name"
-          className="px-4 py-1 w-80 rounded-md"
-        />
-        <input
-          onChange={(e: any) => setRoomId(e.target.value)}
-          placeholder="Enter or paste room id"
-          className="px-4 py-1 w-80 rounded-md"
-        />
+        <div className="flex gap-2 md:flex-row flex-col">
+          <input
+            onChange={(e: any) => setUserName(e.target.value)}
+            placeholder="Enter your name"
+            className="px-4 py-1 w-80 rounded-md"
+          />
+          <input
+            onChange={(e: any) => setRoomId(e.target.value)}
+            placeholder="Enter or paste room id"
+            className="px-4 py-1 w-80 rounded-md"
+          />
+        </div>
 
         <button
           onClick={joinRoom}
